@@ -21,7 +21,13 @@ class TriviaList{
         
         let trivia04 = Trivia(Question: "The Titanic departed from the United Kingdom, where was it supposed to arrive?", Options: ["Paris","Washington D.C.","New York City","Boston"], correctAnswer: 2)
         
-        triviaArray = [trivia01, trivia02, trivia03, trivia04]
+        let trivia05 = Trivia(Question: "Which city is the oldest", Options:["Mexico City","Cape Town","San Juan"],correctAnswer:0)
+        
+        let trivia06 = Trivia(Question:"Which country was the first to allow women to vote in national elections", Options:["Poland", "United States","Sweden"], correctAnswer:0)
+        
+        let trivia07 = Trivia(Question:"Which of following rivers is the longest", Options:["Yangtze","Mississippi","Congo"], correctAnswer:1)
+        
+        triviaArray = [trivia01, trivia02, trivia03, trivia04, trivia05, trivia06, trivia07]
     }
     
     func selectQuestion() -> Trivia {

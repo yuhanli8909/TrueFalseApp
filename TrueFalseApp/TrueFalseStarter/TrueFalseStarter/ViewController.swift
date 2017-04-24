@@ -12,7 +12,7 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
-    let questionsPerRound = 4
+    let questionsPerRound = 7
     var questionsAsked = 0
     var correctQuestions = 0
     
@@ -37,6 +37,7 @@ class ViewController: UIViewController {
         // Start game
         playGameStartSound()
         displayQuestion()
+        displayOptions()
     }
     
     override func didReceiveMemoryWarning() {
@@ -53,20 +54,38 @@ class ViewController: UIViewController {
         
         questionField.text = self.trivia?.Question
         playAgainButton.isHidden = true
-        
-        Option1.setTitle(self.trivia?.Options[0], for: UIControlState.normal)
-        Option1.tag = 0
-        
-        Option2.setTitle(self.trivia?.Options[1], for: UIControlState.normal)
-        Option2.tag = 1
-        
-        Option3.setTitle(self.trivia?.Options[2], for: UIControlState.normal)
-        Option3.tag = 2
-        
-        Option4.setTitle(self.trivia?.Options[3], for: UIControlState.normal)
-        Option4.tag = 3
-        
     }
+    
+    func displayOptions() {
+        
+        if (self.trivia?.Options.count == 4) {
+            Option1.setTitle(self.trivia?.Options[0], for: UIControlState.normal)
+            Option1.tag = 0
+            
+            Option2.setTitle(self.trivia?.Options[1], for: UIControlState.normal)
+            Option2.tag = 1
+            
+            Option3.setTitle(self.trivia?.Options[2], for: UIControlState.normal)
+            Option3.tag = 2
+            
+            Option4.setTitle(self.trivia?.Options[3], for: UIControlState.normal)
+            Option4.tag = 3
+        
+            Option4.isHidden = false
+        }else if(self.trivia?.Options.count == 3){
+            Option1.setTitle(self.trivia?.Options[0], for: UIControlState.normal)
+            Option1.tag = 0
+            
+            Option2.setTitle(self.trivia?.Options[1], for: UIControlState.normal)
+            Option2.tag = 1
+            
+            Option3.setTitle(self.trivia?.Options[2], for: UIControlState.normal)
+            Option3.tag = 2
+            
+            Option4.isHidden = true
+        }
+    }
+
     
     func displayScore() {
         // Hide the answer buttons
@@ -103,6 +122,7 @@ class ViewController: UIViewController {
         } else {
             // Continue game
             displayQuestion()
+            displayOptions()
         }
     }
     
