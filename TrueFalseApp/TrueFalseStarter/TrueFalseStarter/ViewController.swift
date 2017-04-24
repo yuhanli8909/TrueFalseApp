@@ -107,12 +107,13 @@ class ViewController: UIViewController {
         
         if (sender.tag == self.trivia?.correctAnswer) {
             correctQuestions += 1
-            questionField.text = "Correct!"
+            questionField.text = "Well Done, the answer is correct!"
         } else {
-            questionField.text = "Sorry, wrong answer!"
+            questionField.text = "Sorry, wrong answer! The correct answer is \(sender.tag)"
         }
         
         loadNextRoundWithDelay(seconds: 2)
+    
     }
     
     func nextRound() {
