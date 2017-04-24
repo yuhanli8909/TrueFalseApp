@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var questionsAsked = 0
     var correctQuestions = 0
     
+    var trivia: Trivia?
     
     var gameSound: SystemSoundID = 0
     
@@ -26,6 +27,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var Option3: UIButton!
     @IBOutlet weak var Option4: UIButton!
     @IBOutlet weak var playAgainButton: UIButton!
+    
     
     
     override func viewDidLoad() {
@@ -47,21 +49,21 @@ class ViewController: UIViewController {
     //method that shows the Questrion<string> in the questionField
     func displayQuestion() {
         
-        let trivia = triviaList.selectQuestion()
+        self.trivia = triviaList.selectQuestion()
         
-        questionField.text = trivia.Question
+        questionField.text = self.trivia?.Question
         playAgainButton.isHidden = true
         
-        Option1.setTitle(trivia.Options[0], for: UIControlState.normal)
+        Option1.setTitle(self.trivia?.Options[0], for: UIControlState.normal)
         Option1.tag = 0
         
-        Option2.setTitle(trivia.Options[1], for: UIControlState.normal)
+        Option2.setTitle(self.trivia?.Options[1], for: UIControlState.normal)
         Option2.tag = 1
         
-        Option3.setTitle(trivia.Options[2], for: UIControlState.normal)
+        Option3.setTitle(self.trivia?.Options[2], for: UIControlState.normal)
         Option3.tag = 2
         
-        Option4.setTitle(trivia.Options[3], for: UIControlState.normal)
+        Option4.setTitle(self.trivia?.Options[3], for: UIControlState.normal)
         Option4.tag = 3
         
     }
@@ -84,7 +86,7 @@ class ViewController: UIViewController {
         // Increment the questions asked counter
         questionsAsked += 1
         
-        if (sender.tag == triviaList.selectQuestion().correctAnswer) {
+        if (sender.tag == self.trivia?.correctAnswer) {
             correctQuestions += 1
             questionField.text = "Correct!"
         } else {
@@ -95,7 +97,7 @@ class ViewController: UIViewController {
     }
     
     func nextRound() {
-        if questionsAsked == questionsPerRound {
+        if questionsAsked >= questionsPerRound {
             // Game is over
             displayScore()
         } else {

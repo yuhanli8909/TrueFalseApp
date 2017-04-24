@@ -27,6 +27,9 @@ class TriviaList{
     func selectQuestion() -> Trivia {
         let indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: triviaArray.count)
         let selectQuestion = triviaArray[indexOfSelectedQuestion]
+        
+        triviaArray.remove(at: indexOfSelectedQuestion)
+        
         return selectQuestion
     }
     
