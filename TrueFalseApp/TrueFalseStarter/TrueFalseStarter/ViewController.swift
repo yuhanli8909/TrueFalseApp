@@ -15,11 +15,13 @@ class ViewController: UIViewController {
     let questionsPerRound = 7
     var questionsAsked = 0
     var correctQuestions = 0
+    var seconds = 15
     
     var trivia: Trivia?
     
     var gameSound: SystemSoundID = 0
     
+    var timer = Timer()
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var Option1: UIButton!
@@ -27,6 +29,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var Option3: UIButton!
     @IBOutlet weak var Option4: UIButton!
     @IBOutlet weak var playAgainButton: UIButton!
+    @IBOutlet weak var timerLabel: UILabel!
     
     
     
@@ -38,11 +41,22 @@ class ViewController: UIViewController {
         playGameStartSound()
         displayQuestion()
         displayOptions()
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector:(#selector(ViewController.updateTimer)), userInfo: nil, repeats: true )
+    }
+    
+    func updateTimer() {
+        seconds -= 1
+        timerLabel.text = "There are \(seconds)s left"
     }
     
     let triviaList = TriviaList()
@@ -54,6 +68,8 @@ class ViewController: UIViewController {
         
         questionField.text = self.trivia?.Question
         playAgainButton.isHidden = true
+        
+        runTimer()
     }
     
     func displayOptions() {
@@ -85,7 +101,7 @@ class ViewController: UIViewController {
             Option4.isHidden = true
         }
     }
-
+    
     
     func displayScore() {
         // Hide the answer buttons
@@ -104,6 +120,10 @@ class ViewController: UIViewController {
     @IBAction func checkAnswer(_ sender: UIButton) {
         // Increment the questions asked counter
         questionsAsked += 1
+        
+        timer.invalidate()
+        seconds = 15
+        timerLabel.text = "There are \(seconds)s left"
         
         if (sender.tag == self.trivia?.correctAnswer) {
             correctQuestions += 1
