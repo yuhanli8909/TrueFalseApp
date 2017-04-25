@@ -12,14 +12,16 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
-    let questionsPerRound = 4
+    let questionsPerRound = 7
     var questionsAsked = 0
     var correctQuestions = 0
+    var seconds = 15
     
     var trivia: Trivia?
     
     var gameSound: SystemSoundID = 0
     
+    var timer = Timer()
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var Option1: UIButton!
@@ -27,6 +29,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var Option3: UIButton!
     @IBOutlet weak var Option4: UIButton!
     @IBOutlet weak var playAgainButton: UIButton!
+    @IBOutlet weak var timerLabel: UILabel!
     
     
     
@@ -37,11 +40,23 @@ class ViewController: UIViewController {
         // Start game
         playGameStartSound()
         displayQuestion()
+        displayOptions()
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    func runTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector:(#selector(ViewController.updateTimer)), userInfo: nil, repeats: true )
+    }
+    
+    func updateTimer() {
+        seconds -= 1
+        timerLabel.text = "There are \(seconds)s left"
     }
     
     let triviaList = TriviaList()
@@ -54,19 +69,39 @@ class ViewController: UIViewController {
         questionField.text = self.trivia?.Question
         playAgainButton.isHidden = true
         
-        Option1.setTitle(self.trivia?.Options[0], for: UIControlState.normal)
-        Option1.tag = 0
-        
-        Option2.setTitle(self.trivia?.Options[1], for: UIControlState.normal)
-        Option2.tag = 1
-        
-        Option3.setTitle(self.trivia?.Options[2], for: UIControlState.normal)
-        Option3.tag = 2
-        
-        Option4.setTitle(self.trivia?.Options[3], for: UIControlState.normal)
-        Option4.tag = 3
-        
+        runTimer()
     }
+    
+    func displayOptions() {
+        
+        if (self.trivia?.Options.count == 4) {
+            Option1.setTitle(self.trivia?.Options[0], for: UIControlState.normal)
+            Option1.tag = 0
+            
+            Option2.setTitle(self.trivia?.Options[1], for: UIControlState.normal)
+            Option2.tag = 1
+            
+            Option3.setTitle(self.trivia?.Options[2], for: UIControlState.normal)
+            Option3.tag = 2
+            
+            Option4.setTitle(self.trivia?.Options[3], for: UIControlState.normal)
+            Option4.tag = 3
+        
+            Option4.isHidden = false
+        }else if(self.trivia?.Options.count == 3){
+            Option1.setTitle(self.trivia?.Options[0], for: UIControlState.normal)
+            Option1.tag = 0
+            
+            Option2.setTitle(self.trivia?.Options[1], for: UIControlState.normal)
+            Option2.tag = 1
+            
+            Option3.setTitle(self.trivia?.Options[2], for: UIControlState.normal)
+            Option3.tag = 2
+            
+            Option4.isHidden = true
+        }
+    }
+    
     
     func displayScore() {
         // Hide the answer buttons
@@ -86,14 +121,19 @@ class ViewController: UIViewController {
         // Increment the questions asked counter
         questionsAsked += 1
         
+        timer.invalidate()
+        seconds = 15
+        timerLabel.text = "There are \(seconds)s left"
+        
         if (sender.tag == self.trivia?.correctAnswer) {
             correctQuestions += 1
-            questionField.text = "Correct!"
+            questionField.text = "Well Done, the answer is correct!"
         } else {
-            questionField.text = "Sorry, wrong answer!"
+            questionField.text = "Sorry, wrong answer! The correct answer is \(sender.tag)"
         }
         
         loadNextRoundWithDelay(seconds: 2)
+    
     }
     
     func nextRound() {
@@ -103,6 +143,7 @@ class ViewController: UIViewController {
         } else {
             // Continue game
             displayQuestion()
+            displayOptions()
         }
     }
     
